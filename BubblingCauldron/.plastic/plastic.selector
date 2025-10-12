@@ -1,4 +1,0 @@
-repository "BubblingCauldron/BubblingCauldron@1627270@cloud"
-  path "/"
-    br "/main"
-    co "/main"
