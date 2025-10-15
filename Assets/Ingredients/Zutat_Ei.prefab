@@ -22,12 +22,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3457300353679085083, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Name
-      value: Zutat_Auge
+      value: Zutat_Ei
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_Size.x
+      value: 0.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_Size.y
+      value: 0.88
       objectReference: {fileID: 0}
     - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8336617572864770441, guid: 518e8b554845d8049818c0ac610cd390, type: 3}
+      objectReference: {fileID: 3029990764615265637, guid: 10c2c072680d3d743a1462128a5125dd, type: 3}
     - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
