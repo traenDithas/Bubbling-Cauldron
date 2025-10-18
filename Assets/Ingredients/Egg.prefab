@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3457300353679085083, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Name
-      value: Zutat_Ei
+      value: Egg
       objectReference: {fileID: 0}
     - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Size.x
