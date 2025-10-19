@@ -1,0 +1,188 @@
+fileFormatVersion: 2
+guid: 83be6f0203c0e2249bbcc49017a88638
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8018364749533813487
+    second: Sortiermaschine_Rohr_Leuchten_0
+  - first:
+      213: 5740450380861198592
+    second: Sortiermaschine_Rohr_Leuchten_1
+  - first:
+      213: 809063848812076323
+    second: Sortiermaschine_Rohr_Leuchten_2
+  - first:
+      213: 8227044275157758150
+    second: Sortiermaschine_Rohr_Leuchten_3
+  - first:
+      213: -3759985932073415022
+    second: Sortiermaschine_Rohr_Leuchten_4
+  - first:
+      213: 8292306135593458332
+    second: Sortiermaschine_Rohr_Leuchten_5
+  - first:
+      213: 3024121853810323838
+    second: Sortiermaschine_Rohr_Leuchten_6
+  - first:
+      213: -5719698805688924082
+    second: Sortiermaschine_Rohr_Leuchten_7
+  - first:
+      213: 6096081166799095780
+    second: Sortiermaschine_Rohr_Leuchten_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sortiermaschine_Rohr_Leuchten_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 158
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e488fa09d3c8f90b0800000000000000
+      internalID: -5719698805688924082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 868b9e7610c1b4d44aef248140bc9e8e
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Sortiermaschine_Rohr_Leuchten_0: 8018364749533813487
+      Sortiermaschine_Rohr_Leuchten_1: 5740450380861198592
+      Sortiermaschine_Rohr_Leuchten_2: 809063848812076323
+      Sortiermaschine_Rohr_Leuchten_3: 8227044275157758150
+      Sortiermaschine_Rohr_Leuchten_4: -3759985932073415022
+      Sortiermaschine_Rohr_Leuchten_5: 8292306135593458332
+      Sortiermaschine_Rohr_Leuchten_6: 3024121853810323838
+      Sortiermaschine_Rohr_Leuchten_7: -5719698805688924082
+      Sortiermaschine_Rohr_Leuchten_8: 6096081166799095780
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
