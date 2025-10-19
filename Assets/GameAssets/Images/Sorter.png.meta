@@ -113,23 +113,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sortiermaschine_Hebelanlage_Zu_0
+      name: Sorter_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 47
-        width: 174
-        height: 166
+        x: 4
+        y: 127
+        width: 172
+        height: 85
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 43859a758c4a20b00800000000000000
-      internalID: 793377664741759028
+      spriteID: 457deabd6f2b97749ad98fb7220983b1
+      internalID: 821182181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sorter_1
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 0
+        width: 43
+        height: 125
+      alignment: 9
+      pivot: {x: 0.4, y: 0.86}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e618a47909931e4b9525376bae5db9d
+      internalID: -1794513673
       vertices: []
       indices: 
       edges: []
@@ -138,7 +160,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c5131e3490476e848aea0e8606bf7137
     internalID: 0
     vertices: []
     indices: 
@@ -146,9 +168,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Sortiermaschine_Hebelanlage_Zu_0: 793377664741759028
+      Sorter_0: 821182181
+      Sorter_1: -1794513673
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

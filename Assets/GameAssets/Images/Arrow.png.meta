@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f5d5a38d91993404a8ddce0d704456ac
+guid: 7bb9bed3ec0755446b05bd62a14cca29
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6519774029533641807
-    second: Sortiermaschine_Hebelanlage_Auf_0
+      213: -4346244404228752641
+    second: Arrow_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sortiermaschine_Hebelanlage_Auf_0
+      name: Arrow_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 10
-        width: 174
-        height: 203
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 141
+        height: 38
+      alignment: 9
+      pivot: {x: 0.105, y: 0.52}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f4c7b26cfe3ea7a50800000000000000
-      internalID: 6519774029533641807
+      spriteID: ffa7ae2edb90fa3c0800000000000000
+      internalID: -4346244404228752641
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 43b872a7daabadc4ebe26234e50eb6ec
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sortiermaschine_Hebelanlage_Auf_0: 6519774029533641807
+      Arrow_0: -4346244404228752641
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
