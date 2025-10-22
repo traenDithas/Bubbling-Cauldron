@@ -16,8 +16,11 @@ public class IngredientSpawner : MonoBehaviour
     [SerializeField] 
     private float spawnInterval = 2.0f;
 
-    // The fixed position where ingredients will be created.
-    private Vector2 spawnPosition = new Vector2(0f, 4f);
+    // --- NEW VARIABLE HERE! ---
+    [Tooltip("The exact position where ingredients will be created.")]
+    [SerializeField] 
+    private Vector2 spawnPosition = new Vector2(0f, 4f); // We give it a default value
+
 
     /// <summary>
     /// This method is called when the game starts.
