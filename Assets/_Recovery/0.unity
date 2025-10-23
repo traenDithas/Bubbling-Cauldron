@@ -537,6 +537,23 @@ MonoBehaviour:
   recipeLength: 4
   recipeText: {fileID: 657342110}
   scoreManager: {fileID: 696550459}
+--- !u!1 &753491584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 897187182924864944, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+  m_PrefabInstance: {fileID: 6806282713544544160}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &753491588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753491584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9c83ce2d04d000428d624072182da78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrashPipe
 --- !u!1 &903531037
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,9 +1056,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 897187182924864944, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      propertyPath: m_Name
+      value: Trash_Pipe
+      objectReference: {fileID: 0}
     - target: {fileID: 1157715703320810241, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
       propertyPath: m_Name
       value: Sorter_Mashine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1790653681544681758, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2839540131777908918, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1083,10 +1108,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6733577426577052730, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      propertyPath: spawnPosition.x
+      value: -0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910295438046747654, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      propertyPath: m_Name
+      value: Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910295438046747654, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 897187182924864944, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 753491588}
   m_SourcePrefab: {fileID: 100100000, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
 --- !u!1001 &6866001230535531181
 PrefabInstance:
