@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &9281527 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6733577426577052730, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
+  m_PrefabInstance: {fileID: 6806282713544544160}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59855d00ffcf6e145bb35c343c00adcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IngredientSpawner
 --- !u!1 &512805161
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,14 +540,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c717ff15a33cfd84086a3c2731d1cab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RecipeManager
+  recipesToMaxLevel: 10
+  levelArrow: {fileID: 4054488966124950384}
+  ingredientSpawner: {fileID: 9281527}
   allPossibleIngredients:
   - {fileID: -3536647457584736262, guid: 1571609252c03ea4996cd55a5da7d103, type: 3}
   - {fileID: -2522577960248536596, guid: 4dd1194f46c9bca429b5e7995175fbd3, type: 3}
   - {fileID: -8366761585812756188, guid: f70309d1a30db5a469ca0f7dcf00c952, type: 3}
   - {fileID: -3725152295378793867, guid: 6f463c7887151344ba43c87b24e9da64, type: 3}
   recipeLength: 4
+  heatPerWrongIngredient: 0.25
   recipeText: {fileID: 657342110}
   scoreManager: {fileID: 696550459}
+  cauldronGauge: {fileID: 1538616267}
 --- !u!1 &753491584 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 897187182924864944, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
@@ -905,6 +921,17 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1538616267 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8775317964354511893, guid: a401f02610d92c3489c502da7ce306b2, type: 3}
+  m_PrefabInstance: {fileID: 2366232201388362857}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06445d083c814bd4681b72a5a4afac59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::wieIchWill
 --- !u!1 &1551277145 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1157715703320810241, guid: dbec33145e1cec2429f0b24b9e477f4f, type: 3}
@@ -1174,6 +1201,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6043946190177577892, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6043946190177577892, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6043946190177577892, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 8401071957850453274, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
       propertyPath: m_Name
       value: Level_Display
@@ -1181,8 +1220,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4513214134560308857, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4054488966124950384}
   m_SourcePrefab: {fileID: 100100000, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+--- !u!1 &4054488966124950383 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4513214134560308857, guid: fda881f880b1bb24fa4db886de6e3e7b, type: 3}
+  m_PrefabInstance: {fileID: 4054488966124950382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4054488966124950384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4054488966124950383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 656666328430cb64491c31afa87036dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelArrow
+  minRotationZ: 270
+  maxRotationZ: 360
 --- !u!1001 &4518150866099165680
 PrefabInstance:
   m_ObjectHideFlags: 0

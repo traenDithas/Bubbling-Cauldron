@@ -6,63 +6,64 @@ using UnityEngine;
 /// </summary>
 public class IngredientSpawner : MonoBehaviour
 {
-    // --- CONFIGURATION ---
     [Header("Spawning Settings")]
     [Tooltip("A list of all ingredient prefabs that can be spawned.")]
     [SerializeField] 
     private GameObject[] ingredientPrefabs;
 
-    [Tooltip("The time in seconds between each spawn.")]
-    [SerializeField] 
-    private float spawnInterval = 2.0f;
+    // --- UPDATED SPAWN INTERVAL ---
+    [Tooltip("The spawn speed at the start (e.g., 2.0 seconds).")]
+    [SerializeField]
+    private float initialSpawnInterval = 2.0f;
 
-    // --- NEW VARIABLE HERE! ---
+    [Tooltip("The fastest spawn speed at max level (e.g., 0.5 seconds).")]
+    [SerializeField]
+    private float fastestSpawnInterval = 0.5f;
+    
     [Tooltip("The exact position where ingredients will be created.")]
     [SerializeField] 
-    private Vector2 spawnPosition = new Vector2(0f, 4f); // We give it a default value
+    private Vector2 spawnPosition = new Vector2(0f, 4f);
 
+    // This will hold the spawner's current speed
+    private float currentSpawnInterval; 
 
-    /// <summary>
-    /// This method is called when the game starts.
-    /// We use it to kick off the spawning process.
-    /// </summary>
     void Start()
     {
-        // Start the SpawnIngredient coroutine.
+        // Set the speed to the starting speed
+        currentSpawnInterval = initialSpawnInterval; 
         StartCoroutine(SpawnIngredientRoutine());
     }
 
+    // --- NEW PUBLIC FUNCTION ---
     /// <summary>
-    /// A Coroutine that runs in the background to spawn ingredients.
-    /// This allows us to wait for a certain amount of time without freezing the game.
+    /// Updates the spawner's speed based on the game's difficulty.
     /// </summary>
+    /// <param name="normalizedDifficulty">A value from 0 (easy) to 1 (hard).</param>
+    public void UpdateDifficulty(float normalizedDifficulty)
+    {
+        // Lerp between the initial and fastest speed
+        // As difficulty (0-1) goes UP, interval (2.0-0.5) goes DOWN
+        currentSpawnInterval = Mathf.Lerp(initialSpawnInterval, fastestSpawnInterval, normalizedDifficulty);
+        Debug.Log("New Spawn Interval: " + currentSpawnInterval); // For testing
+    }
+
     private IEnumerator SpawnIngredientRoutine()
     {
-        // This is an infinite loop that will run for the entire game.
         while (true)
         {
-            // --- SPAWNING LOGIC ---
-
-            // 1. Check if we have any prefabs to spawn. If not, log an error.
             if (ingredientPrefabs.Length == 0)
             {
                 Debug.LogError("No ingredient prefabs assigned to the spawner!");
-                yield break; // Stop the coroutine.
+                yield break;
             }
 
-            // 2. Pick a random index from our array.
             int randomIndex = Random.Range(0, ingredientPrefabs.Length);
-
-            // 3. Get the random ingredient prefab from the array.
             GameObject randomIngredient = ingredientPrefabs[randomIndex];
-
-            // 4. Create a new instance of the ingredient at the spawn position.
-            // Quaternion.identity means "no rotation".
             Instantiate(randomIngredient, spawnPosition, Quaternion.identity);
 
-            // --- WAIT ---
-            // Wait for 'spawnInterval' seconds before the loop runs again.
-            yield return new WaitForSeconds(spawnInterval);
+            // --- UPDATED WAIT TIME ---
+            // Wait for the *current* interval, which can change
+            yield return new WaitForSeconds(currentSpawnInterval);
         }
     }
 }
