@@ -3,53 +3,70 @@ using UnityEngine;
 
 /// <summary>
 /// Spawns random ingredient prefabs at a fixed point and a set interval.
+/// Can be started and stopped by other scripts.
 /// </summary>
 public class IngredientSpawner : MonoBehaviour
 {
     [Header("Spawning Settings")]
-    [Tooltip("A list of all ingredient prefabs that can be spawned.")]
     [SerializeField] 
     private GameObject[] ingredientPrefabs;
 
-    // --- UPDATED SPAWN INTERVAL ---
-    [Tooltip("The spawn speed at the start (e.g., 2.0 seconds).")]
     [SerializeField]
     private float initialSpawnInterval = 2.0f;
 
-    [Tooltip("The fastest spawn speed at max level (e.g., 0.5 seconds).")]
     [SerializeField]
     private float fastestSpawnInterval = 0.5f;
     
-    [Tooltip("The exact position where ingredients will be created.")]
     [SerializeField] 
     private Vector2 spawnPosition = new Vector2(0f, 4f);
 
-    // This will hold the spawner's current speed
-    private float currentSpawnInterval; 
+    private float currentSpawnInterval;
+    
+    // --- NEW ---
+    // This flag will control our spawning loop.
+    private bool isSpawning = false;
 
     void Start()
     {
-        // Set the speed to the starting speed
         currentSpawnInterval = initialSpawnInterval; 
+        StartSpawning(); // Start spawning when the game begins
+    }
+
+    public void UpdateDifficulty(float normalizedDifficulty)
+    {
+        currentSpawnInterval = Mathf.Lerp(initialSpawnInterval, fastestSpawnInterval, normalizedDifficulty);
+        Debug.Log("New Spawn Interval: " + currentSpawnInterval);
+    }
+
+    // --- NEW FUNCTION ---
+    /// <summary>
+    /// Starts the ingredient spawning coroutine.
+    /// </summary>
+    public void StartSpawning()
+    {
+        // Don't start if we are already spawning
+        if (isSpawning) return; 
+
+        isSpawning = true;
         StartCoroutine(SpawnIngredientRoutine());
     }
 
-    // --- NEW PUBLIC FUNCTION ---
+    // --- NEW FUNCTION ---
     /// <summary>
-    /// Updates the spawner's speed based on the game's difficulty.
+    /// Stops the ingredient spawning coroutine.
     /// </summary>
-    /// <param name="normalizedDifficulty">A value from 0 (easy) to 1 (hard).</param>
-    public void UpdateDifficulty(float normalizedDifficulty)
+    public void StopSpawning()
     {
-        // Lerp between the initial and fastest speed
-        // As difficulty (0-1) goes UP, interval (2.0-0.5) goes DOWN
-        currentSpawnInterval = Mathf.Lerp(initialSpawnInterval, fastestSpawnInterval, normalizedDifficulty);
-        Debug.Log("New Spawn Interval: " + currentSpawnInterval); // For testing
+        isSpawning = false;
+        // The coroutine will stop by itself when it checks the 'isSpawning' flag
     }
+
 
     private IEnumerator SpawnIngredientRoutine()
     {
-        while (true)
+        // --- UPDATED ---
+        // This loop will now stop when 'isSpawning' becomes false
+        while (isSpawning)
         {
             if (ingredientPrefabs.Length == 0)
             {
@@ -61,8 +78,6 @@ public class IngredientSpawner : MonoBehaviour
             GameObject randomIngredient = ingredientPrefabs[randomIndex];
             Instantiate(randomIngredient, spawnPosition, Quaternion.identity);
 
-            // --- UPDATED WAIT TIME ---
-            // Wait for the *current* interval, which can change
             yield return new WaitForSeconds(currentSpawnInterval);
         }
     }

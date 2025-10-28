@@ -5,23 +5,20 @@ using TMPro;
 
 public class RecipeManager : MonoBehaviour
 {
-    // --- NEW DIFFICULTY & LEVEL VARIABLES ---
     [Header("Difficulty & Progression")]
-    [Tooltip("The total number of recipes to complete to reach max difficulty.")]
     [SerializeField]
     private int recipesToMaxLevel = 10;
 
-    [Tooltip("Reference to the LevelArrow script (on the Arrow).")]
+    [Tooltip("The total number of recipes to complete to reach max difficulty.")]
+    [SerializeField]
+    // This tracks our current progress
+    private int recipesCompleted = 0;
+
     [SerializeField]
     private LevelArrow levelArrow;
 
-    [Tooltip("Reference to the IngredientSpawner script.")]
     [SerializeField]
     private IngredientSpawner ingredientSpawner;
-
-    // This tracks our current progress
-    private int recipesCompleted = 0;
-    // ------------------------------------------
 
     [Header("Recipe Settings")]
     [SerializeField] 
@@ -67,6 +64,13 @@ public class RecipeManager : MonoBehaviour
         {
             cauldronGauge.SetHeat(0f);
         }
+
+        // --- NEW ---
+        // 3. Restart the spawner with the new settings
+        if (ingredientSpawner != null)
+        {
+            ingredientSpawner.StartSpawning();
+        }
     }
 
     private void UpdateRecipeUI()
@@ -108,9 +112,7 @@ public class RecipeManager : MonoBehaviour
             if (currentRecipe.Count == 0)
             {
                 Debug.Log("Recipe Complete! Generating new one.");
-                // --- NEW CODE: UPDATE DIFFICULTY ---
                 HandleRecipeComplete(); 
-                // ---------------------------------
                 Invoke("GenerateNewRecipe", 1.5f);
             }
         }
@@ -128,23 +130,27 @@ public class RecipeManager : MonoBehaviour
         }
     }
 
-    // --- NEW FUNCTION ---
-    /// <summary>
-    /// Called when a recipe is finished. Updates difficulty and level visuals.
-    /// </summary>
     private void HandleRecipeComplete()
     {
-        // 1. Increment our level counter
-        recipesCompleted++;
+        // --- NEW ---
+        // 1. Stop the spawner immediately
+        if (ingredientSpawner != null)
+        {
+            ingredientSpawner.StopSpawning();
+        }
+        else
+        {
+            Debug.LogError("IngredientSpawner is not assigned in the RecipeManager!");
+        }
 
-        // 2. Calculate the normalized difficulty (0.0 to 1.0)
-        // We use Mathf.Min to cap it at the max level
+        // 2. Increment our level counter
+        recipesCompleted++;
+        
         float normalizedDifficulty = (float)recipesCompleted / (float)recipesToMaxLevel;
         normalizedDifficulty = Mathf.Clamp01(normalizedDifficulty); 
 
         Debug.Log("Recipe " + recipesCompleted + " complete! Difficulty is now: " + normalizedDifficulty);
 
-        // 3. Tell the Level Arrow to update
         if (levelArrow != null)
         {
             levelArrow.SetValue(normalizedDifficulty);
@@ -154,7 +160,6 @@ public class RecipeManager : MonoBehaviour
             Debug.LogError("LevelArrow is not assigned in the RecipeManager!");
         }
 
-        // 4. Tell the Spawner to update its speed
         if (ingredientSpawner != null)
         {
             ingredientSpawner.UpdateDifficulty(normalizedDifficulty);
