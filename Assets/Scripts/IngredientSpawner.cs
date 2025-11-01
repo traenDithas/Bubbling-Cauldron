@@ -2,8 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Spawns random ingredient prefabs at a fixed point and a set interval.
-/// Can be started and stopped by other scripts.
+/// Spawns ingredients and controls the movement of the entire pipe assembly.
+/// The Glass_Pipe and Pipe_LED should be children of this object in the hierarchy.
 /// </summary>
 public class IngredientSpawner : MonoBehaviour
 {
@@ -17,55 +17,60 @@ public class IngredientSpawner : MonoBehaviour
     [SerializeField]
     private float fastestSpawnInterval = 0.5f;
     
+    [Tooltip("A small offset from this object's center to spawn ingredients (usually 0, 0).")]
     [SerializeField] 
-    private Vector2 spawnPosition = new Vector2(0f, 4f);
+    private Vector2 spawnPositionOffset = Vector2.zero; // (0, 0)
+
+    // --- UPDATED MOVEMENT ---
+    [Header("Assembly Movement")]
+    [Tooltip("The lowest Y-position this Spawner object will move to.")]
+    [SerializeField] 
+    private float spawnerLowestY = 2.0f; 
 
     private float currentSpawnInterval;
-    
-    // --- NEW ---
-    // This flag will control our spawning loop.
     private bool isSpawning = false;
-
+    
+    // This will store our starting Y position.
+    private float spawnerInitialY;
+    
     void Start()
     {
         currentSpawnInterval = initialSpawnInterval; 
-        StartSpawning(); // Start spawning when the game begins
+        
+        // Store our own starting Y-position
+        spawnerInitialY = this.transform.position.y;
+
+        StartSpawning();
     }
 
     public void UpdateDifficulty(float normalizedDifficulty)
     {
+        // 1. Update Spawn Interval
         currentSpawnInterval = Mathf.Lerp(initialSpawnInterval, fastestSpawnInterval, normalizedDifficulty);
         Debug.Log("New Spawn Interval: " + currentSpawnInterval);
+
+        // 2. Update THIS OBJECT's Y Position
+        float newSpawnY = Mathf.Lerp(spawnerInitialY, spawnerLowestY, normalizedDifficulty);
+        
+        // Move our entire transform (and all its children)
+        this.transform.position = new Vector2(this.transform.position.x, newSpawnY);
     }
 
-    // --- NEW FUNCTION ---
-    /// <summary>
-    /// Starts the ingredient spawning coroutine.
-    /// </summary>
     public void StartSpawning()
     {
-        // Don't start if we are already spawning
         if (isSpawning) return; 
-
         isSpawning = true;
         StartCoroutine(SpawnIngredientRoutine());
     }
 
-    // --- NEW FUNCTION ---
-    /// <summary>
-    /// Stops the ingredient spawning coroutine.
-    /// </summary>
     public void StopSpawning()
     {
         isSpawning = false;
-        // The coroutine will stop by itself when it checks the 'isSpawning' flag
     }
 
 
     private IEnumerator SpawnIngredientRoutine()
     {
-        // --- UPDATED ---
-        // This loop will now stop when 'isSpawning' becomes false
         while (isSpawning)
         {
             if (ingredientPrefabs.Length == 0)
@@ -76,7 +81,11 @@ public class IngredientSpawner : MonoBehaviour
 
             int randomIndex = Random.Range(0, ingredientPrefabs.Length);
             GameObject randomIngredient = ingredientPrefabs[randomIndex];
-            Instantiate(randomIngredient, spawnPosition, Quaternion.identity);
+
+            // --- UPDATED SPAWN POINT ---
+            // Calculate the spawn point based on our *current* position + the offset
+            Vector2 spawnPoint = (Vector2)this.transform.position + spawnPositionOffset;
+            Instantiate(randomIngredient, spawnPoint, Quaternion.identity);
 
             yield return new WaitForSeconds(currentSpawnInterval);
         }
