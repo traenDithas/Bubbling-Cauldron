@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2594255827782551099
+--- !u!1001 &3368471857141507576
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,6 +8,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
@@ -22,27 +50,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3457300353679085083, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Name
-      value: Eye
+      value: Potiion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_Size.x
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: m_Size.y
+      value: 0.89
       objectReference: {fileID: 0}
     - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -8336617572864770441, guid: 518e8b554845d8049818c0ac610cd390, type: 3}
-    - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6108866553493748403, guid: dd94fb7677b9be0499e37c373a555848, type: 3}
     - target: {fileID: 3699761785657597659, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7205124012763943803, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: scoreValue
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7205124012763943803, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: ingredientID
-      value: Eye
+      value: Potion
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

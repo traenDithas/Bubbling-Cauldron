@@ -40,30 +40,16 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7205124012763943803, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: scoreValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7205124012763943803, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: ingredientID
+      value: Mushroom
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3457300353679085083, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -3725152295378793867}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
---- !u!1 &863118502719424544 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3457300353679085083, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
-  m_PrefabInstance: {fileID: 2594255827782551099}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &-3725152295378793867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 863118502719424544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab1e8539cadf26240a42d7a2e6290a76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IngredientData
-  ingredientID: Mushroom
-  scoreValue: 10
