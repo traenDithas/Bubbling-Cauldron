@@ -2206,17 +2206,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IngredientSpawner
   ingredientPrefabs:
-  - {fileID: 863118502719424544, guid: 4dd1194f46c9bca429b5e7995175fbd3, type: 3}
   - {fileID: 863118502719424544, guid: 1571609252c03ea4996cd55a5da7d103, type: 3}
+  - {fileID: 863118502719424544, guid: 4dd1194f46c9bca429b5e7995175fbd3, type: 3}
   - {fileID: 863118502719424544, guid: f70309d1a30db5a469ca0f7dcf00c952, type: 3}
   - {fileID: 863118502719424544, guid: 6f463c7887151344ba43c87b24e9da64, type: 3}
-  - {fileID: 91755430850472931, guid: 39a941d47568c634da694c92f98e10a0, type: 3}
   - {fileID: 2806129347194521000, guid: ec2dcbd28804bff4b9555a50c4dc654a, type: 3}
+  - {fileID: 91755430850472931, guid: 39a941d47568c634da694c92f98e10a0, type: 3}
   initialSpawnInterval: 2
   fastestSpawnInterval: 0.5
   spawnPositionOffset: {x: 0, y: 0}
   spawnerLowestY: -1.5
-  glassPipeTransform: {fileID: 3562224574609586920}
 --- !u!1 &5620765544832028754
 GameObject:
   m_ObjectHideFlags: 0
