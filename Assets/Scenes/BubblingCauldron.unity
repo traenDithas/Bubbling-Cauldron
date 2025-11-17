@@ -2227,7 +2227,19 @@ MonoBehaviour:
     - prefab: {fileID: 91755430850472931, guid: 39a941d47568c634da694c92f98e10a0, type: 3}
       spawnWeight: 55
   - levelName: Level 2
-    ingredients: []
+    ingredients:
+    - prefab: {fileID: 2806129347194521000, guid: ec2dcbd28804bff4b9555a50c4dc654a, type: 3}
+      spawnWeight: 75
+    - prefab: {fileID: 91755430850472931, guid: 39a941d47568c634da694c92f98e10a0, type: 3}
+      spawnWeight: 50
+    - prefab: {fileID: 863118502719424544, guid: 6f463c7887151344ba43c87b24e9da64, type: 3}
+      spawnWeight: 10
+    - prefab: {fileID: 863118502719424544, guid: f70309d1a30db5a469ca0f7dcf00c952, type: 3}
+      spawnWeight: 10
+    - prefab: {fileID: 863118502719424544, guid: 4dd1194f46c9bca429b5e7995175fbd3, type: 3}
+      spawnWeight: 5
+    - prefab: {fileID: 863118502719424544, guid: 1571609252c03ea4996cd55a5da7d103, type: 3}
+      spawnWeight: 5
   - levelName: 
     ingredients: []
   - levelName: 

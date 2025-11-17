@@ -5,31 +5,19 @@ using TMPro;
 
 public class RecipeManager : MonoBehaviour
 {
-    [Header("Difficulty & Progression")]
-    [SerializeField]
-    private int recipesToMaxLevel = 10;
-
-    [Tooltip("The total number of recipes to complete to reach max difficulty.")]
-    [SerializeField]
-    // This tracks our current progress
-    private int recipesCompleted = 0;
-
-    [SerializeField]
-    private LevelArrow levelArrow;
-
-    [SerializeField]
-    private IngredientSpawner ingredientSpawner;
-
     [Header("Recipe Settings")]
-    [SerializeField] 
-    private IngredientData[] allPossibleIngredients;
-
+    [Tooltip("The number of ingredients in one recipe.")]
     [SerializeField] 
     private int recipeLength = 4;
 
     [Tooltip("How much heat (0-1) to add for each wrong ingredient.")]
     [SerializeField]
     private float heatPerWrongIngredient = 0.25f;
+    
+    [Header("Difficulty & Progression")]
+    [Tooltip("The total number of recipes to complete to reach max difficulty.")]
+    [SerializeField]
+    private int recipesToMaxLevel = 10;
 
     [Header("UI Elements")]
     [SerializeField] 
@@ -38,26 +26,85 @@ public class RecipeManager : MonoBehaviour
     [Header("Component References")]
     [SerializeField] 
     private ScoreManager scoreManager;
-
+    
     [SerializeField]
     private CauldronGauge cauldronGauge;
-
     
-    private List<IngredientData> currentRecipe = new List<IngredientData>();
+    [Tooltip("Reference to the IngredientSpawner. This is CRITICAL!")]
+    [SerializeField]
+    private IngredientSpawner ingredientSpawner; 
+    
+    [SerializeField]
+    private LevelArrow levelArrow;
 
+    private List<IngredientData> currentRecipe = new List<IngredientData>();
+    private int recipesCompleted = 0;
+
+
+    // --- THIS IS THE FIXED START METHOD ---
     void Start()
     {
+        if (ingredientSpawner == null)
+        {
+            Debug.LogError("CRITICAL ERROR: RecipeManager is missing its reference to the IngredientSpawner!");
+        }
+
+        // 1. Set the initial state (level 0)
+        recipesCompleted = 0;
+        float normalizedDifficulty = 0f;
+        
+        // 2. Tell the spawner and arrow about level 0
+        if (levelArrow != null)
+        {
+            levelArrow.SetValue(normalizedDifficulty);
+        }
+        if (ingredientSpawner != null)
+        {
+            // Because the spawner's Awake() has run, this is now safe
+            ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
+        }
+        
+        // 3. NOW, generate the first recipe (which will start the spawner)
         GenerateNewRecipe();
     }
+    // --- END OF FIX ---
 
     public void GenerateNewRecipe()
     {
         currentRecipe.Clear();
+
+        if (ingredientSpawner == null)
+        {
+            Debug.LogError("IngredientSpawner not assigned in RecipeManager!");
+            UpdateRecipeUI();
+            return;
+        }
+
+        List<IngredientSpawnData> availableIngredients = ingredientSpawner.GetCurrentLevelIngredients();
+
+        if (availableIngredients.Count == 0)
+        {
+            Debug.LogWarning("No ingredients available for this level! Spawner list is empty.");
+            UpdateRecipeUI();
+            return;
+        }
+
         for (int i = 0; i < recipeLength; i++)
         {
-            int randomIndex = Random.Range(0, allPossibleIngredients.Length);
-            currentRecipe.Add(allPossibleIngredients[randomIndex]);
+            int randomIndex = Random.Range(0, availableIngredients.Count);
+            GameObject ingredientPrefab = availableIngredients[randomIndex].prefab;
+            IngredientData ingredientData = ingredientPrefab.GetComponent<IngredientData>();
+            
+            if(ingredientData != null)
+            {
+                currentRecipe.Add(ingredientData);
+            }
+            else
+            {
+                Debug.LogError("Prefab " + ingredientPrefab.name + " is missing its IngredientData component!");
+            }
         }
+
         UpdateRecipeUI();
         
         if (cauldronGauge != null)
@@ -65,8 +112,6 @@ public class RecipeManager : MonoBehaviour
             cauldronGauge.SetHeat(0f);
         }
 
-        // --- NEW ---
-        // 3. Restart the spawner with the new settings
         if (ingredientSpawner != null)
         {
             ingredientSpawner.StartSpawning();
@@ -75,7 +120,7 @@ public class RecipeManager : MonoBehaviour
 
     private void UpdateRecipeUI()
     {
-        string recipeString = "Rezept:\n"; 
+        string recipeString = "Rezp:\n"; // Changed "Rezept" to "Rezp"
         if (currentRecipe.Count == 0)
         {
             recipeString += "Fertig!";
@@ -112,7 +157,7 @@ public class RecipeManager : MonoBehaviour
             if (currentRecipe.Count == 0)
             {
                 Debug.Log("Recipe Complete! Generating new one.");
-                HandleRecipeComplete(); 
+                HandleRecipeComplete(); // Simplified call
                 Invoke("GenerateNewRecipe", 1.5f);
             }
         }
@@ -123,50 +168,32 @@ public class RecipeManager : MonoBehaviour
             {
                 cauldronGauge.AddHeat(heatPerWrongIngredient);
             }
-            else
-            {
-                Debug.LogError("CauldronGauge is not assigned in the RecipeManager!");
-            }
         }
     }
 
+    // --- THIS METHOD IS NOW SIMPLIFIED ---
     private void HandleRecipeComplete()
     {
-        // --- NEW ---
-        // 1. Stop the spawner immediately
         if (ingredientSpawner != null)
         {
             ingredientSpawner.StopSpawning();
         }
-        else
-        {
-            Debug.LogError("IngredientSpawner is not assigned in the RecipeManager!");
-        }
 
-        // 2. Increment our level counter
-        recipesCompleted++;
+        recipesCompleted++; // Just increment it
         
-        float normalizedDifficulty = (float)recipesCompleted / (float)recipesToMaxLevel;
+        // Add a small check to prevent division by zero
+        float normalizedDifficulty = (recipesToMaxLevel > 0) ? (float)recipesCompleted / (float)recipesToMaxLevel : 0f;
         normalizedDifficulty = Mathf.Clamp01(normalizedDifficulty); 
-
-        Debug.Log("Recipe " + recipesCompleted + " complete! Difficulty is now: " + normalizedDifficulty);
 
         if (levelArrow != null)
         {
             levelArrow.SetValue(normalizedDifficulty);
         }
-        else
-        {
-            Debug.LogError("LevelArrow is not assigned in the RecipeManager!");
-        }
 
         if (ingredientSpawner != null)
         {
-            ingredientSpawner.UpdateDifficulty(normalizedDifficulty);
-        }
-        else
-        {
-            Debug.LogError("IngredientSpawner is not assigned in the RecipeManager!");
+            // Pass both values to the spawner
+            ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
         }
     }
 }
