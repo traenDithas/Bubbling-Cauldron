@@ -8,6 +8,7 @@ using System.Linq;
 public class IngredientSpawnData
 {
     public GameObject prefab;
+    [Tooltip("Relative chance to spawn compared to others in this specific list.")]
     public float spawnWeight = 1.0f;
 }
 
@@ -15,7 +16,18 @@ public class IngredientSpawnData
 public class LevelIngredientList
 {
     public string levelName;
+    
+    [Header("Recipe Items")]
+    [Tooltip("Ingredients that appear on the Recipe Scroll.")]
     public List<IngredientSpawnData> ingredients;
+
+    [Header("Special Items (No Recipe)")]
+    [Tooltip("Chance (0-1) that a spawn will be a Special item instead of a Recipe item. 0.1 = 10%.")]
+    [Range(0f, 1f)]
+    public float specialSpawnChance = 0.1f; // Default 10% chance
+
+    [Tooltip("Extra items (Coins, Bombs, etc.) that spawn but are NOT in the recipe.")]
+    public List<IngredientSpawnData> specialIngredients;
 }
 
 // --- Main Spawner Script ---
@@ -39,14 +51,10 @@ public class IngredientSpawner : MonoBehaviour
     // --- Private Variables ---
     private float currentSpawnInterval;
     private bool isSpawning = false;
-    private float spawnerInitialY; // This is the variable we need to set early
+    private float spawnerInitialY;
     private float currentNormalizedDifficulty = 0f;
     private int currentLevelIndex = 0;
 
-    // --- THIS IS THE FIX ---
-    // Awake() runs before any Start() methods, so we guarantee
-    // 'spawnerInitialY' is set before the RecipeManager tries to call
-    // UpdateDifficulty().
     void Awake()
     {
         spawnerInitialY = transform.position.y;
@@ -54,7 +62,6 @@ public class IngredientSpawner : MonoBehaviour
         currentNormalizedDifficulty = 0f;
         currentLevelIndex = 0;
     }
-    // --- END OF FIX ---
 
     public void UpdateDifficulty(float normalizedDifficulty, int completedLevelCount)
     {
@@ -62,7 +69,6 @@ public class IngredientSpawner : MonoBehaviour
         
         currentSpawnInterval = Mathf.Lerp(initialSpawnInterval, fastestSpawnInterval, normalizedDifficulty);
         
-        // This Lerp will now work correctly because spawnerInitialY is set
         float newSpawny = Mathf.Lerp(spawnerInitialY, spawnerLowestY, normalizedDifficulty);
         transform.position = new Vector3(transform.position.x, newSpawny, transform.position.z);
         
@@ -83,19 +89,44 @@ public class IngredientSpawner : MonoBehaviour
         isSpawning = false;
     }
 
+    /// <summary>
+    /// Picks a random prefab. It decides whether to pick from the Normal list 
+    /// or the Special list based on the 'specialSpawnChance'.
+    /// </summary>
     private GameObject GetRandomPrefabFromList()
     {
         if (levelData.Count == 0 || levelData.Count <= currentLevelIndex) return null;
 
-        List<IngredientSpawnData> currentIngredients = levelData[currentLevelIndex].ingredients;
-        if (currentIngredients.Count == 0) return null;
+        LevelIngredientList currentLevel = levelData[currentLevelIndex];
 
-        float totalWeight = currentIngredients.Sum(item => item.spawnWeight);
-        if (totalWeight <= 0) return currentIngredients[0].prefab;
+        // 1. Decide: Special or Normal?
+        bool spawnSpecial = false;
+        if (currentLevel.specialIngredients.Count > 0)
+        {
+            // Roll the dice (0.0 to 1.0)
+            if (Random.value < currentLevel.specialSpawnChance)
+            {
+                spawnSpecial = true;
+            }
+        }
+
+        // 2. Select the correct list
+        List<IngredientSpawnData> targetList = spawnSpecial ? currentLevel.specialIngredients : currentLevel.ingredients;
+
+        // Safety check: if target list is empty, try the other one
+        if (targetList.Count == 0)
+        {
+            targetList = currentLevel.ingredients;
+        }
+        if (targetList.Count == 0) return null; // Both empty
+
+        // 3. Pick weighted item from the selected list
+        float totalWeight = targetList.Sum(item => item.spawnWeight);
+        if (totalWeight <= 0) return targetList[0].prefab;
 
         float randomValue = Random.Range(0, totalWeight);
 
-        foreach (var item in currentIngredients)
+        foreach (var item in targetList)
         {
             if (randomValue <= item.spawnWeight)
             {
@@ -103,7 +134,7 @@ public class IngredientSpawner : MonoBehaviour
             }
             randomValue -= item.spawnWeight;
         }
-        return currentIngredients[0].prefab;
+        return targetList[0].prefab;
     }
 
     private IEnumerator SpawnIngredientRoutine()
@@ -132,10 +163,15 @@ public class IngredientSpawner : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// The RecipeManager calls this. We ONLY return the Normal ingredients.
+    /// We keep the Special ingredients secret!
+    /// </summary>
     public List<IngredientSpawnData> GetCurrentLevelIngredients()
     {
         if (levelData.Count > 0 && currentLevelIndex < levelData.Count)
         {
+            // ONLY return the normal list, ignoring special items
             return levelData[currentLevelIndex].ingredients;
         }
         return new List<IngredientSpawnData>();
