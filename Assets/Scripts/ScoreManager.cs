@@ -1,52 +1,79 @@
 using UnityEngine;
-using TMPro; // Import the TextMeshPro library!
+using TMPro;
 
 /// <summary>
-/// Manages the player's score and updates the score UI text.
+/// Manages the player's score AND their current winning streak.
 /// </summary>
 public class ScoreManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    [Tooltip("The TextMeshPro UI element that displays the score.")]
-    [SerializeField] 
-    private TextMeshProUGUI scoreText;
+    [Tooltip("The UI element for the total score.")]
+    [SerializeField] private TextMeshProUGUI scoreText;
 
-    // The current score, kept private to protect it.
+    [Tooltip("The UI element for the current streak (e.g. 'x5').")]
+    [SerializeField] private TextMeshProUGUI streakText;
+
+    // State
     private int currentScore;
+    private int currentStreak;
 
-    /// <summary>
-    /// This method is called when the game starts.
-    /// </summary>
     void Start()
     {
-        // Initialize the score to 0.
         currentScore = 0;
-        UpdateScoreText();
+        currentStreak = 1; // Start with a 1x multiplier
+        UpdateUI();
     }
 
     /// <summary>
-    /// Adds a specified amount to the current score and updates the UI.
+    /// Adds points to the score, multiplied by the current streak.
     /// </summary>
-    /// <param name="amountToAdd">The number of points to add.</param>
-    public void AddScore(int amountToAdd)
+    /// <param name="baseAmount">The ingredient's base value.</param>
+    public void AddScore(int baseAmount)
     {
-        currentScore += amountToAdd;
-        UpdateScoreText();
+        // Calculate score based on streak
+        int totalAdded = baseAmount * currentStreak;
+        currentScore += totalAdded;
+        
+        Debug.Log("Added " + totalAdded + " points (Base: " + baseAmount + " x Streak: " + currentStreak + ")");
+        
+        UpdateUI();
     }
 
     /// <summary>
-    /// Updates the on-screen text to display the current score.
+    /// Increases the streak multiplier by 1.
     /// </summary>
-    private void UpdateScoreText()
+    public void IncrementStreak()
+    {
+        currentStreak++;
+        UpdateUI();
+        // Ideally, play a "ding" sound here later!
+    }
+
+    /// <summary>
+    /// Resets the streak back to 1.
+    /// </summary>
+    public void ResetStreak()
+    {
+        if (currentStreak > 1)
+        {
+            Debug.Log("Streak Broken! Reset to x1.");
+            // Here you could play a "failure" sound
+        }
+        currentStreak = 1;
+        UpdateUI();
+    }
+
+    private void UpdateUI()
     {
         if (scoreText != null)
         {
-            // Update the text. We use .ToString() to convert the number to text.
             scoreText.text = currentScore.ToString();
         }
-        else
+
+        if (streakText != null)
         {
-            Debug.LogError("ScoreText is not assigned in the ScoreManager!");
+            // Display as "x1", "x2", etc.
+            streakText.text = "x" + currentStreak.ToString();
         }
     }
 }
