@@ -687,6 +687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrashPipe
   scoreManager: {fileID: 696550459}
+  recipeManager: {fileID: 696550461}
 --- !u!1 &903531037
 GameObject:
   m_ObjectHideFlags: 0
