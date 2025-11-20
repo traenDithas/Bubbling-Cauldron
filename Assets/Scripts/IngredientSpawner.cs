@@ -16,15 +16,20 @@ public class IngredientSpawnData
 public class LevelIngredientList
 {
     public string levelName;
+
+    // --- NEW SETTING ---
+    [Tooltip("How many items should be on the recipe scroll for this level?")]
+    public int recipeSize = 3; // Default is 3
+    // -------------------
     
     [Header("Recipe Items")]
     [Tooltip("Ingredients that appear on the Recipe Scroll.")]
     public List<IngredientSpawnData> ingredients;
 
     [Header("Special Items (No Recipe)")]
-    [Tooltip("Chance (0-1) that a spawn will be a Special item instead of a Recipe item. 0.1 = 10%.")]
+    [Tooltip("Chance (0-1) that a spawn will be a Special item instead of a Recipe item.")]
     [Range(0f, 1f)]
-    public float specialSpawnChance = 0.1f; // Default 10% chance
+    public float specialSpawnChance = 0.1f; 
 
     [Tooltip("Extra items (Coins, Bombs, etc.) that spawn but are NOT in the recipe.")]
     public List<IngredientSpawnData> specialIngredients;
@@ -89,10 +94,6 @@ public class IngredientSpawner : MonoBehaviour
         isSpawning = false;
     }
 
-    /// <summary>
-    /// Picks a random prefab. It decides whether to pick from the Normal list 
-    /// or the Special list based on the 'specialSpawnChance'.
-    /// </summary>
     private GameObject GetRandomPrefabFromList()
     {
         if (levelData.Count == 0 || levelData.Count <= currentLevelIndex) return null;
@@ -103,24 +104,21 @@ public class IngredientSpawner : MonoBehaviour
         bool spawnSpecial = false;
         if (currentLevel.specialIngredients.Count > 0)
         {
-            // Roll the dice (0.0 to 1.0)
             if (Random.value < currentLevel.specialSpawnChance)
             {
                 spawnSpecial = true;
             }
         }
 
-        // 2. Select the correct list
         List<IngredientSpawnData> targetList = spawnSpecial ? currentLevel.specialIngredients : currentLevel.ingredients;
 
-        // Safety check: if target list is empty, try the other one
         if (targetList.Count == 0)
         {
             targetList = currentLevel.ingredients;
         }
-        if (targetList.Count == 0) return null; // Both empty
+        if (targetList.Count == 0) return null; 
 
-        // 3. Pick weighted item from the selected list
+        // 3. Pick weighted item
         float totalWeight = targetList.Sum(item => item.spawnWeight);
         if (totalWeight <= 0) return targetList[0].prefab;
 
@@ -163,17 +161,26 @@ public class IngredientSpawner : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// The RecipeManager calls this. We ONLY return the Normal ingredients.
-    /// We keep the Special ingredients secret!
-    /// </summary>
     public List<IngredientSpawnData> GetCurrentLevelIngredients()
     {
         if (levelData.Count > 0 && currentLevelIndex < levelData.Count)
         {
-            // ONLY return the normal list, ignoring special items
             return levelData[currentLevelIndex].ingredients;
         }
         return new List<IngredientSpawnData>();
     }
+
+    // --- NEW FUNCTION ---
+    /// <summary>
+    /// Helper to get the recipe size for the current level
+    /// </summary>
+    public int GetCurrentLevelRecipeSize()
+    {
+        if (levelData.Count > 0 && currentLevelIndex < levelData.Count)
+        {
+            return levelData[currentLevelIndex].recipeSize;
+        }
+        return 3; // Default safety value
+    }
+    // --------------------
 }

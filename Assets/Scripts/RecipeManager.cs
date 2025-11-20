@@ -6,9 +6,7 @@ using TMPro;
 public class RecipeManager : MonoBehaviour
 {
     [Header("Recipe Settings")]
-    [Tooltip("The number of ingredients in one recipe.")]
-    [SerializeField] 
-    private int recipeLength = 4;
+    // We removed 'recipeLength' from here because it's now in the Spawner's Level Data!
 
     [Tooltip("How much heat (0-1) to add for each wrong ingredient.")]
     [SerializeField]
@@ -59,11 +57,9 @@ public class RecipeManager : MonoBehaviour
         }
         if (ingredientSpawner != null)
         {
-            // Because the spawner's Awake() has run, this is now safe
             ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
         }
         
-        // 3. NOW, generate the first recipe (which will start the spawner)
         GenerateNewRecipe();
     }
 
@@ -78,7 +74,6 @@ public class RecipeManager : MonoBehaviour
             return;
         }
 
-        // Ask the spawner for the list of ingredients available for this level
         List<IngredientSpawnData> availableIngredients = ingredientSpawner.GetCurrentLevelIngredients();
 
         if (availableIngredients.Count == 0)
@@ -88,8 +83,12 @@ public class RecipeManager : MonoBehaviour
             return;
         }
 
-        // Pick random ingredients from that list
-        for (int i = 0; i < recipeLength; i++)
+        // --- THIS IS CHANGED ---
+        // Get the correct size for THIS level from the spawner
+        int currentLevelSize = ingredientSpawner.GetCurrentLevelRecipeSize();
+        
+        // Create the recipe loop
+        for (int i = 0; i < currentLevelSize; i++)
         {
             int randomIndex = Random.Range(0, availableIngredients.Count);
             GameObject ingredientPrefab = availableIngredients[randomIndex].prefab;
@@ -104,6 +103,7 @@ public class RecipeManager : MonoBehaviour
                 Debug.LogError("Prefab " + ingredientPrefab.name + " is missing its IngredientData component!");
             }
         }
+        // -----------------------
 
         UpdateRecipeUI();
         
@@ -144,12 +144,9 @@ public class RecipeManager : MonoBehaviour
             {
                 wasInRecipe = true;
                 
-                // --- STREAK LOGIC ---
-                // Increase streak FIRST, then add score
                 scoreManager.IncrementStreak();
                 scoreManager.AddScore(caughtIngredient.scoreValue);
-                // --------------------
-
+                
                 currentRecipe.RemoveAt(i);
                 break;
             }
@@ -171,11 +168,8 @@ public class RecipeManager : MonoBehaviour
         {
             Debug.Log("Wrong ingredient: " + caughtIngredient.ingredientID);
             
-            // --- STREAK LOGIC ---
-            // Wrong ingredient breaks the streak!
             scoreManager.ResetStreak();
-            // --------------------
-
+            
             if (cauldronGauge != null)
             {
                 cauldronGauge.AddHeat(heatPerWrongIngredient);
@@ -192,6 +186,7 @@ public class RecipeManager : MonoBehaviour
 
         recipesCompleted++;
         
+        // Small check to avoid divide by zero
         float normalizedDifficulty = (recipesToMaxLevel > 0) ? (float)recipesCompleted / (float)recipesToMaxLevel : 0f;
         normalizedDifficulty = Mathf.Clamp01(normalizedDifficulty); 
 
@@ -202,27 +197,19 @@ public class RecipeManager : MonoBehaviour
 
         if (ingredientSpawner != null)
         {
-            // Pass both values to the spawner
             ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
         }
     }
 
-    // --- NEW FUNCTION ---
-    /// <summary>
-    /// Checks if a specific ingredient ID is currently needed in the recipe.
-    /// Returns TRUE if it is in the list, FALSE if it is not.
-    /// Called by TrashPipe to determine if streak should be reset.
-    /// </summary>
     public bool IsIngredientInCurrentRecipe(string idToCheck)
     {
         foreach (IngredientData item in currentRecipe)
         {
             if (item.ingredientID == idToCheck)
             {
-                return true; // Yes, we need this!
+                return true; 
             }
         }
-        return false; // No, we don't need this.
+        return false;
     }
-    // --------------------
 }
