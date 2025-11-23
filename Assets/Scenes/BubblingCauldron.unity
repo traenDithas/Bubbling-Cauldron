@@ -778,6 +778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   scoreText: {fileID: 1624795272}
   streakText: {fileID: 195822915}
+  highScoreText: {fileID: 0}
 --- !u!4 &696550460
 Transform:
   m_ObjectHideFlags: 0
@@ -825,6 +826,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseManager
   pauseMenuUI: {fileID: 1301789306}
+  textScore: {fileID: 263843406}
+  textTime: {fileID: 1311511010}
+  textRecipeCount: {fileID: 854884937}
+  textTotalIngredients: {fileID: 1452062650}
+  textCorrectIngredients: {fileID: 1913027149}
+  textTrashedIngredients: {fileID: 791310794}
+  textSpeedLevel: {fileID: 1178880783}
+  scoreManager: {fileID: 696550459}
+  recipeManager: {fileID: 696550461}
+  ingredientSpawner: {fileID: 5515484027606751571}
 --- !u!1 &791310792
 GameObject:
   m_ObjectHideFlags: 0

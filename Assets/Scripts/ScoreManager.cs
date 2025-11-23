@@ -1,79 +1,86 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Manages the player's score AND their current winning streak.
-/// </summary>
 public class ScoreManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    [Tooltip("The UI element for the total score.")]
     [SerializeField] private TextMeshProUGUI scoreText;
-
-    [Tooltip("The UI element for the current streak (e.g. 'x5').")]
     [SerializeField] private TextMeshProUGUI streakText;
+    [SerializeField] private TextMeshProUGUI highScoreText;
 
-    // State
-    private int currentScore;
+    // --- STATISTICS ---
+    // We use "properties" { get; private set; } so other scripts can READ them
+    // but only this script can CHANGE them.
+    public int CurrentScore { get; private set; }
+    public int CorrectIngredients { get; private set; }
+    public int WrongIngredients { get; private set; }
+    public int TrashedIngredients { get; private set; }
+    
+    // Helper to get total collected (Correct + Wrong + Trashed)
+    public int TotalIngredientsEncountered => CorrectIngredients + WrongIngredients + TrashedIngredients;
+
+    // Internal State
     private int currentStreak;
+    private int highScore;
 
     void Start()
     {
-        currentScore = 0;
-        currentStreak = 1; // Start with a 1x multiplier
+        CurrentScore = 0;
+        currentStreak = 1; 
+        CorrectIngredients = 0;
+        WrongIngredients = 0;
+        TrashedIngredients = 0;
+
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
         UpdateUI();
     }
 
-    /// <summary>
-    /// Adds points to the score, multiplied by the current streak.
-    /// </summary>
-    /// <param name="baseAmount">The ingredient's base value.</param>
     public void AddScore(int baseAmount)
     {
-        // Calculate score based on streak
         int totalAdded = baseAmount * currentStreak;
-        currentScore += totalAdded;
+        CurrentScore += totalAdded;
         
-        Debug.Log("Added " + totalAdded + " points (Base: " + baseAmount + " x Streak: " + currentStreak + ")");
-        
+        // Track Statistic
+        CorrectIngredients++;
+
+        if (CurrentScore > highScore)
+        {
+            highScore = CurrentScore;
+            PlayerPrefs.SetInt("HighScore", highScore);
+            PlayerPrefs.Save();
+        }
         UpdateUI();
     }
 
-    /// <summary>
-    /// Increases the streak multiplier by 1.
-    /// </summary>
+    // --- NEW: Track Wrong Items ---
+    public void RecordWrongIngredient()
+    {
+        WrongIngredients++;
+        // Wrong ingredients usually break streak, handled in RecipeManager
+    }
+
+    // --- NEW: Track Trashed Items ---
+    public void RecordTrashedIngredient()
+    {
+        TrashedIngredients++;
+    }
+
     public void IncrementStreak()
     {
         currentStreak++;
         UpdateUI();
-        // Ideally, play a "ding" sound here later!
     }
 
-    /// <summary>
-    /// Resets the streak back to 1.
-    /// </summary>
     public void ResetStreak()
     {
-        if (currentStreak > 1)
-        {
-            Debug.Log("Streak Broken! Reset to x1.");
-            // Here you could play a "failure" sound
-        }
         currentStreak = 1;
         UpdateUI();
     }
 
     private void UpdateUI()
     {
-        if (scoreText != null)
-        {
-            scoreText.text = currentScore.ToString();
-        }
-
-        if (streakText != null)
-        {
-            // Display as "x1", "x2", etc.
-            streakText.text = "x" + currentStreak.ToString();
-        }
+        if (scoreText != null) scoreText.text = CurrentScore.ToString();
+        if (streakText != null) streakText.text = "x" + currentStreak.ToString();
+        if (highScoreText != null) highScoreText.text = "Best: " + highScore.ToString();
     }
 }

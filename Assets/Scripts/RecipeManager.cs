@@ -6,59 +6,35 @@ using TMPro;
 public class RecipeManager : MonoBehaviour
 {
     [Header("Recipe Settings")]
-    // We removed 'recipeLength' from here because it's now in the Spawner's Level Data!
-
-    [Tooltip("How much heat (0-1) to add for each wrong ingredient.")]
-    [SerializeField]
-    private float heatPerWrongIngredient = 0.25f;
+    [SerializeField] private float heatPerWrongIngredient = 0.25f;
     
     [Header("Difficulty & Progression")]
-    [Tooltip("The total number of recipes to complete to reach max difficulty.")]
-    [SerializeField]
-    private int recipesToMaxLevel = 10;
+    [SerializeField] private int recipesToMaxLevel = 10;
 
     [Header("UI Elements")]
-    [SerializeField] 
-    private TextMeshProUGUI recipeText;
+    [SerializeField] private TextMeshProUGUI recipeText;
 
     [Header("Component References")]
-    [SerializeField] 
-    private ScoreManager scoreManager;
-    
-    [SerializeField]
-    private CauldronGauge cauldronGauge;
-    
-    [Tooltip("Reference to the IngredientSpawner. This is CRITICAL!")]
-    [SerializeField]
-    private IngredientSpawner ingredientSpawner; 
-    
-    [SerializeField]
-    private LevelArrow levelArrow;
+    [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private CauldronGauge cauldronGauge;
+    [SerializeField] private IngredientSpawner ingredientSpawner; 
+    [SerializeField] private LevelArrow levelArrow;
 
     private List<IngredientData> currentRecipe = new List<IngredientData>();
-    private int recipesCompleted = 0;
-
+    
+    // --- STATISTICS ---
+    // Public getter so PauseManager can read it
+    public int RecipesCompleted { get; private set; } = 0;
 
     void Start()
     {
-        if (ingredientSpawner == null)
-        {
-            Debug.LogError("CRITICAL ERROR: RecipeManager is missing its reference to the IngredientSpawner!");
-        }
+        if (ingredientSpawner == null) Debug.LogError("Missing IngredientSpawner!");
 
-        // 1. Set the initial state (level 0)
-        recipesCompleted = 0;
+        RecipesCompleted = 0;
         float normalizedDifficulty = 0f;
         
-        // 2. Tell the spawner and arrow about level 0
-        if (levelArrow != null)
-        {
-            levelArrow.SetValue(normalizedDifficulty);
-        }
-        if (ingredientSpawner != null)
-        {
-            ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
-        }
+        if (levelArrow != null) levelArrow.SetValue(normalizedDifficulty);
+        if (ingredientSpawner != null) ingredientSpawner.UpdateDifficulty(normalizedDifficulty, RecipesCompleted);
         
         GenerateNewRecipe();
     }
@@ -67,70 +43,34 @@ public class RecipeManager : MonoBehaviour
     {
         currentRecipe.Clear();
 
-        if (ingredientSpawner == null)
-        {
-            Debug.LogError("IngredientSpawner not assigned in RecipeManager!");
-            UpdateRecipeUI();
-            return;
-        }
+        if (ingredientSpawner == null) return;
 
         List<IngredientSpawnData> availableIngredients = ingredientSpawner.GetCurrentLevelIngredients();
+        if (availableIngredients.Count == 0) return;
 
-        if (availableIngredients.Count == 0)
-        {
-            Debug.LogWarning("No ingredients available for this level! Spawner list is empty.");
-            UpdateRecipeUI();
-            return;
-        }
-
-        // --- THIS IS CHANGED ---
-        // Get the correct size for THIS level from the spawner
         int currentLevelSize = ingredientSpawner.GetCurrentLevelRecipeSize();
         
-        // Create the recipe loop
         for (int i = 0; i < currentLevelSize; i++)
         {
             int randomIndex = Random.Range(0, availableIngredients.Count);
             GameObject ingredientPrefab = availableIngredients[randomIndex].prefab;
             IngredientData ingredientData = ingredientPrefab.GetComponent<IngredientData>();
             
-            if(ingredientData != null)
-            {
-                currentRecipe.Add(ingredientData);
-            }
-            else
-            {
-                Debug.LogError("Prefab " + ingredientPrefab.name + " is missing its IngredientData component!");
-            }
+            if(ingredientData != null) currentRecipe.Add(ingredientData);
         }
-        // -----------------------
 
         UpdateRecipeUI();
-        
-        if (cauldronGauge != null)
-        {
-            cauldronGauge.SetHeat(0f);
-        }
-
-        if (ingredientSpawner != null)
-        {
-            ingredientSpawner.StartSpawning();
-        }
+        if (cauldronGauge != null) cauldronGauge.SetHeat(0f);
+        if (ingredientSpawner != null) ingredientSpawner.StartSpawning();
     }
 
     private void UpdateRecipeUI()
     {
         string recipeString = "Rezp:\n"; 
-        if (currentRecipe.Count == 0)
-        {
-            recipeString += "Fertig!";
-        }
+        if (currentRecipe.Count == 0) recipeString += "Fertig!";
         else
         {
-            foreach (IngredientData ingredient in currentRecipe)
-            {
-                recipeString += "- " + ingredient.ingredientID + "\n";
-            }
+            foreach (IngredientData ingredient in currentRecipe) recipeString += "- " + ingredient.ingredientID + "\n";
         }
         recipeText.text = recipeString;
     }
@@ -143,10 +83,8 @@ public class RecipeManager : MonoBehaviour
             if (currentRecipe[i].ingredientID == caughtIngredient.ingredientID)
             {
                 wasInRecipe = true;
-                
                 scoreManager.IncrementStreak();
-                scoreManager.AddScore(caughtIngredient.scoreValue);
-                
+                scoreManager.AddScore(caughtIngredient.scoreValue); // This increments "Correct" stat
                 currentRecipe.RemoveAt(i);
                 break;
             }
@@ -154,61 +92,42 @@ public class RecipeManager : MonoBehaviour
 
         if (wasInRecipe)
         {
-            Debug.Log("Correct ingredient: " + caughtIngredient.ingredientID);
             UpdateRecipeUI();
-
             if (currentRecipe.Count == 0)
             {
-                Debug.Log("Recipe Complete! Generating new one.");
                 HandleRecipeComplete(); 
                 Invoke("GenerateNewRecipe", 1.5f);
             }
         }
         else
         {
-            Debug.Log("Wrong ingredient: " + caughtIngredient.ingredientID);
+            // --- STAT TRACKING ---
+            scoreManager.RecordWrongIngredient(); 
+            // --------------------
             
             scoreManager.ResetStreak();
-            
-            if (cauldronGauge != null)
-            {
-                cauldronGauge.AddHeat(heatPerWrongIngredient);
-            }
+            if (cauldronGauge != null) cauldronGauge.AddHeat(heatPerWrongIngredient);
         }
     }
 
     private void HandleRecipeComplete()
     {
-        if (ingredientSpawner != null)
-        {
-            ingredientSpawner.StopSpawning();
-        }
+        if (ingredientSpawner != null) ingredientSpawner.StopSpawning();
 
-        recipesCompleted++;
+        RecipesCompleted++;
         
-        // Small check to avoid divide by zero
-        float normalizedDifficulty = (recipesToMaxLevel > 0) ? (float)recipesCompleted / (float)recipesToMaxLevel : 0f;
+        float normalizedDifficulty = (recipesToMaxLevel > 0) ? (float)RecipesCompleted / (float)recipesToMaxLevel : 0f;
         normalizedDifficulty = Mathf.Clamp01(normalizedDifficulty); 
 
-        if (levelArrow != null)
-        {
-            levelArrow.SetValue(normalizedDifficulty);
-        }
-
-        if (ingredientSpawner != null)
-        {
-            ingredientSpawner.UpdateDifficulty(normalizedDifficulty, recipesCompleted);
-        }
+        if (levelArrow != null) levelArrow.SetValue(normalizedDifficulty);
+        if (ingredientSpawner != null) ingredientSpawner.UpdateDifficulty(normalizedDifficulty, RecipesCompleted);
     }
 
     public bool IsIngredientInCurrentRecipe(string idToCheck)
     {
         foreach (IngredientData item in currentRecipe)
         {
-            if (item.ingredientID == idToCheck)
-            {
-                return true; 
-            }
+            if (item.ingredientID == idToCheck) return true; 
         }
         return false;
     }
