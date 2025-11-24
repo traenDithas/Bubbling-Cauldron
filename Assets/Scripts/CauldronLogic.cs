@@ -14,7 +14,7 @@ public class CauldronLogic : MonoBehaviour
     /// <summary>
     /// Called when another Collider2D enters this object's trigger.
     /// </summary>
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         // 1. Get the IngredientData from the object.
         IngredientData ingredient = other.GetComponent<IngredientData>();

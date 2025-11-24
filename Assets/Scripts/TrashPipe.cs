@@ -6,7 +6,7 @@ public class TrashPipe : MonoBehaviour
     [SerializeField] private ScoreManager scoreManager;
     [SerializeField] private RecipeManager recipeManager;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter(Collider other)
     {
         IngredientData ingredient = other.GetComponent<IngredientData>();
 

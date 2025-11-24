@@ -4,7 +4,7 @@ using UnityEngine;
 /// This component holds the essential data for an ingredient.
 /// It also now controls its own fall speed.
 /// </summary>
-[RequireComponent(typeof(Rigidbody2D))] // Good practice: ensures we have a Rigidbody
+[RequireComponent(typeof(Rigidbody))] // Good practice: ensures we have a Rigidbody
 public class IngredientData : MonoBehaviour
 {
     [Header("Ingredient Info")]
@@ -16,15 +16,15 @@ public class IngredientData : MonoBehaviour
 
     // --- NEW ---
     // A private reference to this ingredient's Rigidbody
-    private Rigidbody2D rb;
+    private Rigidbody rb;
 
     /// <summary>
     /// Called when the script instance is being loaded.
     /// </summary>
     void Awake()
     {
-        // Get the Rigidbody2D component attached to this GameObject
-        rb = GetComponent<Rigidbody2D>();
+        // Get the Rigidbody component attached to this GameObject
+        rb = GetComponent<Rigidbody>();
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class IngredientData : MonoBehaviour
     {
         if (rb != null)
         {
-            rb.gravityScale = gravityScale;
+            rb.mass = gravityScale;
         }
     }
     // --- END NEW ---

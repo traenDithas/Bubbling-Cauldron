@@ -8,6 +8,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: scoreValue
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: ingredientID
+      value: Fish
+      objectReference: {fileID: 0}
+    - target: {fileID: 1741932558268805929, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6448278498424b44195339e3a27ce257, type: 2}
     - target: {fileID: 2260326461040340140, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
