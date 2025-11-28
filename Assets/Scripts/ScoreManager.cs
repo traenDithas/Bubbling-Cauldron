@@ -8,7 +8,11 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI streakText;
     [SerializeField] private TextMeshProUGUI highScoreText;
 
-    // --- LIVE STATISTICS (Current Game) ---
+    [Header("References (For Saving Stats)")]
+    [SerializeField] private RecipeManager recipeManager; 
+    [SerializeField] private IngredientSpawner ingredientSpawner;
+
+    // --- LIVE STATISTICS ---
     public int CurrentScore { get; private set; }
     public int CorrectIngredients { get; private set; }
     public int WrongIngredients { get; private set; }
@@ -18,7 +22,7 @@ public class ScoreManager : MonoBehaviour
     // Internal State
     private int currentStreak;
     private int highScore;
-    private float startTime; // To track playtime
+    private float startTime; 
 
     void Start()
     {
@@ -29,7 +33,6 @@ public class ScoreManager : MonoBehaviour
         TrashedIngredients = 0;
         startTime = Time.time;
 
-        // Load existing High Score
         highScore = PlayerPrefs.GetInt("HighScore", 0);
         UpdateUI();
     }
@@ -41,7 +44,6 @@ public class ScoreManager : MonoBehaviour
         
         CorrectIngredients++;
 
-        // Check for High Score immediately
         if (CurrentScore > highScore)
         {
             highScore = CurrentScore;
@@ -49,9 +51,7 @@ public class ScoreManager : MonoBehaviour
             PlayerPrefs.Save();
         }
         
-        // Every time we score, we check if we broke other records too
         CheckAndSaveLifetimeStats();
-        
         UpdateUI();
     }
 
@@ -86,33 +86,47 @@ public class ScoreManager : MonoBehaviour
         if (highScoreText != null) highScoreText.text = "Best: " + highScore.ToString();
     }
 
-    // --- NEW: SAVE ALL LIFETIME STATS ---
-    // This function checks if the current stats are better than the saved ones.
+    // --- UPDATED: SAVE ALL 7 STATS ---
     public void CheckAndSaveLifetimeStats()
     {
-        // 1. Total Ingredients Collected (Max)
+        // 1. Total Ingredients
         int oldMaxIngredients = PlayerPrefs.GetInt("MaxIngredients", 0);
         if (TotalIngredientsEncountered > oldMaxIngredients)
-        {
             PlayerPrefs.SetInt("MaxIngredients", TotalIngredientsEncountered);
-        }
 
-        // 2. Max Correct Ingredients
+        // 2. Max Correct
         int oldMaxCorrect = PlayerPrefs.GetInt("MaxCorrect", 0);
         if (CorrectIngredients > oldMaxCorrect)
-        {
             PlayerPrefs.SetInt("MaxCorrect", CorrectIngredients);
-        }
 
-        // 3. Longest Playtime (in seconds)
+        // 3. Max Trash (The "Messiest Run")
+        int oldMaxTrash = PlayerPrefs.GetInt("MaxTrash", 0);
+        if (TrashedIngredients > oldMaxTrash)
+            PlayerPrefs.SetInt("MaxTrash", TrashedIngredients);
+
+        // 4. Longest Playtime
         float currentRunTime = Time.time - startTime;
         float oldMaxTime = PlayerPrefs.GetFloat("MaxPlaytime", 0f);
         if (currentRunTime > oldMaxTime)
-        {
             PlayerPrefs.SetFloat("MaxPlaytime", currentRunTime);
-        }
         
-        // 4. Note: Max Level/Speed is handled in RecipeManager or can be added here if we passed the level in.
+        // 5. Most Recipes (Need RecipeManager reference)
+        if (recipeManager != null)
+        {
+            int oldMaxRecipes = PlayerPrefs.GetInt("MaxRecipes", 0);
+            if (recipeManager.RecipesCompleted > oldMaxRecipes)
+                PlayerPrefs.SetInt("MaxRecipes", recipeManager.RecipesCompleted);
+        }
+
+        // 6. Highest Level (Need Spawner reference, simplified via RecipeManager count)
+        // Since Level = RecipesCompleted (clamped to 9), we can use that logic or the spawner
+        if (recipeManager != null)
+        {
+            int currentLevel = Mathf.Clamp(recipeManager.RecipesCompleted, 0, 9);
+            int oldMaxLevel = PlayerPrefs.GetInt("MaxLevel", 0);
+            if (currentLevel > oldMaxLevel)
+                PlayerPrefs.SetInt("MaxLevel", currentLevel);
+        }
         
         PlayerPrefs.Save();
     }

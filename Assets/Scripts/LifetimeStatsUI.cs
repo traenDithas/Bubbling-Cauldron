@@ -4,26 +4,29 @@ using TMPro;
 public class LifetimeStatsUI : MonoBehaviour
 {
     [Header("UI Panel")]
-    [Tooltip("The Panel that holds the lifetime stats.")]
     [SerializeField] private GameObject statsPanel;
 
     [Header("Text Fields (For Lifetime Records)")]
     [SerializeField] private TextMeshProUGUI textBestScore;
     [SerializeField] private TextMeshProUGUI textLongestTime;
+    
+    // --- NEW FIELDS ---
+    [SerializeField] private TextMeshProUGUI textMostRecipes;
     [SerializeField] private TextMeshProUGUI textMostIngredients;
     [SerializeField] private TextMeshProUGUI textMostCorrect;
+    [SerializeField] private TextMeshProUGUI textMostTrash;
+    [SerializeField] private TextMeshProUGUI textHighestLevel;
+    // ------------------
 
     private bool isVisible = false;
 
     void Start()
     {
-        // Ensure it starts hidden
         if (statsPanel != null) statsPanel.SetActive(false);
     }
 
     void Update()
     {
-        // Toggle with TAB key
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleStats();
@@ -48,25 +51,37 @@ public class LifetimeStatsUI : MonoBehaviour
     private void LoadAndDisplayStats()
     {
         // 1. High Score
-        int bestScore = PlayerPrefs.GetInt("HighScore", 0);
-        if (textBestScore != null) textBestScore.text = bestScore.ToString();
+        if (textBestScore != null) 
+            textBestScore.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
 
         // 2. Longest Time
         float maxTime = PlayerPrefs.GetFloat("MaxPlaytime", 0f);
         int minutes = Mathf.FloorToInt(maxTime / 60);
         int seconds = Mathf.FloorToInt(maxTime % 60);
-        if (textLongestTime != null) textLongestTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if (textLongestTime != null) 
+            textLongestTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
 
-        // 3. Most Ingredients (Total)
-        int maxIng = PlayerPrefs.GetInt("MaxIngredients", 0);
-        if (textMostIngredients != null) textMostIngredients.text = maxIng.ToString();
+        // 3. Most Recipes
+        if (textMostRecipes != null)
+            textMostRecipes.text = PlayerPrefs.GetInt("MaxRecipes", 0).ToString();
 
-        // 4. Most Correct
-        int maxCorrect = PlayerPrefs.GetInt("MaxCorrect", 0);
-        if (textMostCorrect != null) textMostCorrect.text = maxCorrect.ToString();
+        // 4. Most Ingredients (Total)
+        if (textMostIngredients != null) 
+            textMostIngredients.text = PlayerPrefs.GetInt("MaxIngredients", 0).ToString();
+
+        // 5. Most Correct
+        if (textMostCorrect != null) 
+            textMostCorrect.text = PlayerPrefs.GetInt("MaxCorrect", 0).ToString();
+            
+        // 6. Most Trash
+        if (textMostTrash != null) 
+            textMostTrash.text = PlayerPrefs.GetInt("MaxTrash", 0).ToString();
+            
+        // 7. Highest Level
+        if (textHighestLevel != null) 
+            textHighestLevel.text = PlayerPrefs.GetInt("MaxLevel", 0).ToString();
     }
     
-    // Debug tool to reset stats
     [ContextMenu("Reset Lifetime Stats")]
     public void ResetStats()
     {

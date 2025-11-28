@@ -1159,6 +1159,8 @@ MonoBehaviour:
   scoreText: {fileID: 1624795272}
   streakText: {fileID: 195822915}
   highScoreText: {fileID: 0}
+  recipeManager: {fileID: 696550461}
+  ingredientSpawner: {fileID: 2722849525410692064}
 --- !u!4 &696550460
 Transform:
   m_ObjectHideFlags: 0
@@ -1231,8 +1233,11 @@ MonoBehaviour:
   statsPanel: {fileID: 580328056}
   textBestScore: {fileID: 576242934}
   textLongestTime: {fileID: 513368544}
+  textMostRecipes: {fileID: 1065656053}
   textMostIngredients: {fileID: 1449335043}
   textMostCorrect: {fileID: 975231924}
+  textMostTrash: {fileID: 1708690587}
+  textHighestLevel: {fileID: 1993604015}
 --- !u!1 &791310792
 GameObject:
   m_ObjectHideFlags: 0
