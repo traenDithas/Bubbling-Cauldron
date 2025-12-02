@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "Bubbling-Cauldron.slnx"
+    "dotnet.defaultSolution": "Git_BC.slnx"
 }
