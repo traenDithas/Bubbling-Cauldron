@@ -17,9 +17,13 @@ public class LevelIngredientList
 {
     public string levelName;
 
+    [Header("Recipe Rules")]
+    [Tooltip("How many unique icons are on the recipe scroll?")]
+    public int recipeSize = 3; 
+
     // --- NEW SETTING ---
-    [Tooltip("How many items should be on the recipe scroll for this level?")]
-    public int recipeSize = 3; // Default is 3
+    [Tooltip("How many times EACH ingredient needs to be caught to be full? (e.g. 2 or 4)")]
+    public int fillGoal = 2; 
     // -------------------
     
     [Header("Recipe Items")]
@@ -170,17 +174,26 @@ public class IngredientSpawner : MonoBehaviour
         return new List<IngredientSpawnData>();
     }
 
-    // --- NEW FUNCTION ---
-    /// <summary>
-    /// Helper to get the recipe size for the current level
-    /// </summary>
     public int GetCurrentLevelRecipeSize()
     {
         if (levelData.Count > 0 && currentLevelIndex < levelData.Count)
         {
             return levelData[currentLevelIndex].recipeSize;
         }
-        return 3; // Default safety value
+        return 3; 
+    }
+
+    // --- NEW FUNCTION ---
+    /// <summary>
+    /// Returns the fill goal (how many times to catch an item) for the current level.
+    /// </summary>
+    public int GetCurrentLevelFillGoal()
+    {
+        if (levelData.Count > 0 && currentLevelIndex < levelData.Count)
+        {
+            return levelData[currentLevelIndex].fillGoal;
+        }
+        return 1; // Default to 1 if not set
     }
     // --------------------
 }
