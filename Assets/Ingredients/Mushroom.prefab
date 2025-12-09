@@ -13,6 +13,14 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 5a98f131fdb8d154aad0ba8597127da1, type: 3}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 4e7a72b1ba8bfa44a92dfdbaf9f4c902, type: 2}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: ingredientID
       value: Mushroom
       objectReference: {fileID: 0}

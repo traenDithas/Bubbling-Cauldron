@@ -13,6 +13,14 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: c23f2548c81726e42b67aa659313891d, type: 3}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 0b5ece48b9893fc468c3258b3ac9d956, type: 2}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: ingredientID
       value: Matter
       objectReference: {fileID: 0}

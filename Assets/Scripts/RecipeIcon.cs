@@ -5,11 +5,16 @@ public class RecipeIcon : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Renderer iconRenderer; 
 
-    [Tooltip("The EXACT name of the Fill property in your Shader Graph (usually _Fill or _FillAmount).")]
+    [Tooltip("The EXACT name of the Fill property in your Shader.")]
     [SerializeField] private string fillPropertyName = "_Fill"; 
     
-    [Tooltip("The EXACT name of the Boolean property for unknown state.")]
+    [Tooltip("The EXACT name of the Unknown property.")]
     [SerializeField] private string unknownPropertyName = "_Unknown"; 
+
+    // --- NEW: The name of the Texture property ---
+    [Tooltip("The name of the Texture property in the shader (usually _MainTex or _BaseMap).")]
+    [SerializeField] private string texturePropertyName = "_MainTex";
+    // ---------------------------------------------
 
     private Material materialInstance;
     private float currentFill = 0f;
@@ -23,6 +28,7 @@ public class RecipeIcon : MonoBehaviour
 
         if (iconRenderer != null)
         {
+            // This creates a UNIQUE copy of the material for this icon
             materialInstance = iconRenderer.material;
         }
     }
@@ -34,6 +40,17 @@ public class RecipeIcon : MonoBehaviour
         SetFill(0f); 
         SetUnknownState(false); 
     }
+
+    // --- NEW: Update the Texture Only ---
+    public void SetVisual(Texture newTexture)
+    {
+        if (materialInstance != null && newTexture != null)
+        {
+            // Keep the shader, just change the picture!
+            materialInstance.SetTexture(texturePropertyName, newTexture);
+        }
+    }
+    // ------------------------------------
 
     public void UpdateFill(int currentCount)
     {
@@ -47,7 +64,6 @@ public class RecipeIcon : MonoBehaviour
     {
         if (materialInstance != null)
         {
-            // Use the variable name, not a hardcoded string
             materialInstance.SetFloat(fillPropertyName, amount);
         }
     }

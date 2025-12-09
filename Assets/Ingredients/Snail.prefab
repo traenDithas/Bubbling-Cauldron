@@ -13,6 +13,14 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconTexture
+      value: 
+      objectReference: {fileID: 2800000, guid: 3314ac967e0bcfb45bc56fe7450be362, type: 3}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
+      propertyPath: iconMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 96aadad1bea810a42a04d7a12bacb2f9, type: 2}
+    - target: {fileID: 305613442237397531, guid: 4464b8bcf133242479e858490e7f4dd2, type: 3}
       propertyPath: ingredientID
       value: Snail
       objectReference: {fileID: 0}

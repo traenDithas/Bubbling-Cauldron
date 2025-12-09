@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // We keep this for now to avoid errors in other scripts, even if we don't use it
+using TMPro;
 
 public class RecipeManager : MonoBehaviour
 {
@@ -23,14 +23,11 @@ public class RecipeManager : MonoBehaviour
     [SerializeField] private IngredientSpawner ingredientSpawner; 
     [SerializeField] private LevelArrow levelArrow;
 
-    // --- State Tracking ---
-    // We track how many times we caught each specific ingredient ID
+    // State Tracking
     private Dictionary<string, int> ingredientCounts = new Dictionary<string, int>(); 
-    
-    // We keep a list of current ingredients to help the TrashPipe check logic
     private List<string> currentRecipeIDs = new List<string>();
-
     private int requiredFillGoal;
+    
     public int RecipesCompleted { get; private set; } = 0;
 
     void Start()
@@ -48,7 +45,6 @@ public class RecipeManager : MonoBehaviour
 
     public void GenerateNewRecipe()
     {
-        // 1. Reset State
         ingredientCounts.Clear(); 
         currentRecipeIDs.Clear();
         
@@ -60,23 +56,16 @@ public class RecipeManager : MonoBehaviour
 
         if (ingredientSpawner == null) return;
 
-        // 2. Get Rules from Spawner
         requiredFillGoal = ingredientSpawner.GetCurrentLevelFillGoal(); 
         int recipeSize = ingredientSpawner.GetCurrentLevelRecipeSize();
         
         List<IngredientSpawnData> availableIngredients = ingredientSpawner.GetCurrentLevelIngredients();
 
-        if (availableIngredients.Count == 0)
-        {
-            Debug.LogWarning("No ingredients available for this level!");
-            return;
-        }
+        if (availableIngredients.Count == 0) return;
 
-        // 3. Pick Ingredients and Setup Icons
-        // We limit the loop by the recipeSize OR the number of available slots (4)
+        // Loop through the slots we need
         for (int i = 0; i < recipeSize && i < fixedRecipeIconSlots.Length; i++)
         {
-            // Pick a random ingredient
             int randomIndex = Random.Range(0, availableIngredients.Count);
             GameObject ingredientPrefab = availableIngredients[randomIndex].prefab;
             IngredientData ingredientData = ingredientPrefab.GetComponent<IngredientData>();
@@ -88,10 +77,19 @@ public class RecipeManager : MonoBehaviour
                 // Activate the slot
                 iconSlot.gameObject.SetActive(true);
                 
-                // Initialize the shader logic
+                // 1. Initialize Logic ID
                 iconSlot.Initialize(ingredientData.ingredientID, requiredFillGoal);
                 
-                // Track this ingredient
+                // 2. Initialize Visuals (Swap the TEXTURE, not the Material)
+                if (ingredientData.iconTexture != null)
+                {
+                    iconSlot.SetVisual(ingredientData.iconTexture);
+                }
+                else
+                {
+                    Debug.LogWarning("Ingredient " + ingredientData.ingredientID + " is missing its Icon Texture!");
+                }
+                
                 if(!ingredientCounts.ContainsKey(ingredientData.ingredientID))
                 {
                     ingredientCounts.Add(ingredientData.ingredientID, 0);
@@ -106,16 +104,14 @@ public class RecipeManager : MonoBehaviour
 
     public void OnIngredientCaught(IngredientData caughtIngredient)
     {
-        // Check if this ingredient is part of the current recipe
         if (ingredientCounts.ContainsKey(caughtIngredient.ingredientID))
         {
-            // Check if it is not yet full
             if (ingredientCounts[caughtIngredient.ingredientID] < requiredFillGoal)
             {
-                // --- SUCCESS ---
+                // SUCCESS
                 ingredientCounts[caughtIngredient.ingredientID]++;
                 
-                // Update the visual icon
+                // Find and update the correct icon
                 foreach(var icon in fixedRecipeIconSlots)
                 {
                     if (icon.gameObject.activeSelf && icon.ingredientID == caughtIngredient.ingredientID)
@@ -127,18 +123,15 @@ public class RecipeManager : MonoBehaviour
 
                 scoreManager.IncrementStreak();
                 scoreManager.AddScore(caughtIngredient.scoreValue);
-                
                 CheckForRecipeCompletion();
             }
             else
             {
-                // It was needed, but it's already full!
                 HandleWrongIngredient();
             }
         }
         else
         {
-            // Not in recipe at all
             HandleWrongIngredient();
         }
     }
@@ -153,7 +146,6 @@ public class RecipeManager : MonoBehaviour
     private void CheckForRecipeCompletion()
     {
         bool isComplete = true;
-        
         foreach (var kvp in ingredientCounts)
         {
             if (kvp.Value < requiredFillGoal)
@@ -173,7 +165,6 @@ public class RecipeManager : MonoBehaviour
     private void HandleRecipeComplete()
     {
         if (ingredientSpawner != null) ingredientSpawner.StopSpawning();
-
         RecipesCompleted++;
         
         float normalizedDifficulty = (recipesToMaxLevel > 0) ? (float)RecipesCompleted / (float)recipesToMaxLevel : 0f;
@@ -183,7 +174,6 @@ public class RecipeManager : MonoBehaviour
         if (ingredientSpawner != null) ingredientSpawner.UpdateDifficulty(normalizedDifficulty, RecipesCompleted);
     }
 
-    // Used by TrashPipe
     public bool IsIngredientInCurrentRecipe(string idToCheck)
     {
         return currentRecipeIDs.Contains(idToCheck);
