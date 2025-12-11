@@ -1,29 +1,29 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+// We removed [RequireComponent(typeof(Rigidbody2D))] because we are 3D now
 public class IngredientData : MonoBehaviour
 {
     [Header("Ingredient Info")]
     public string ingredientID;
     public int scoreValue;
 
-    // --- CHANGE: We now want the Texture (Image), not the Material ---
     [Tooltip("Drag the Texture/Image of the ingredient here.")]
     public Texture iconTexture; 
-    // -----------------------------------------------------------------
 
-    private Rigidbody2D rb;
+    // Changed to 3D Rigidbody
+    private Rigidbody rb;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        // Get the 3D component
+        rb = GetComponent<Rigidbody>();
     }
 
     public void SetFallSpeed(float gravityScale)
     {
         if (rb != null)
         {
-            rb.gravityScale = gravityScale;
+            // We can add custom gravity logic here later if needed
         }
     }
 }
